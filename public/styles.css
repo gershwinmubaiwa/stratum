@@ -1,0 +1,46 @@
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#0A0A0C; color:#E0E0E0; font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; height:100vh; overflow:hidden; }
+header { background:#16161A; padding:12px 24px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #2A2A30; }
+header h1 { font-weight:500; letter-spacing:2px; color:#FFF; font-size:1.4rem; }
+.indicator { background:#1FBF75; color:#0A0A0C; padding:4px 12px; border-radius:12px; font-size:0.7rem; font-weight:600; text-transform:uppercase; }
+.grid-container { display:grid; grid-template-columns:240px 1fr 300px; height:calc(100vh - 60px); background:#0A0A0C; }
+aside { background:#16161A; padding:16px; overflow-y:auto; border-right:1px solid #2A2A30; }
+#telemetry-panel { border-right:none; border-left:1px solid #2A2A30; }
+main { background:#0A0A0C; padding:16px; display:flex; flex-direction:column; overflow:hidden; }
+#registry-list { margin-top:12px; }
+.registry-item { background:#1D1D22; padding:10px; margin-bottom:8px; border-radius:6px; cursor:pointer; border-left:3px solid #2D5BFF; font-size:0.85rem; }
+.registry-item .summary { font-weight:500; }
+.registry-item .status { font-size:0.7rem; color:#888; }
+#chat-feed { flex:1; overflow-y:auto; margin-bottom:16px; padding-right:8px; }
+.agent-bubble { margin-bottom:12px; padding:12px 16px; border-radius:8px; background:#1D1D22; border-left:4px solid #2D5BFF; animation:glow-pulse 2s infinite; }
+.agent-bubble .agent-label { font-weight:600; font-size:0.8rem; margin-bottom:4px; text-transform:uppercase; }
+.agent-bubble .agent-text { white-space:pre-wrap; word-break:break-word; }
+.agent-bubble.ceo { border-color:#2D5BFF; box-shadow:0 0 12px rgba(45,91,255,0.3); }
+.agent-bubble.cfo { border-color:#1FBF75; box-shadow:0 0 12px rgba(31,191,117,0.3); }
+.agent-bubble.cmo { border-color:#A855F7; box-shadow:0 0 12px rgba(168,85,247,0.3); }
+.agent-bubble.system { border-color:#FBBF24; background:#2A2A22; box-shadow:0 0 12px rgba(251,191,36,0.2); }
+@keyframes glow-pulse { 0% { box-shadow:0 0 8px rgba(45,91,255,0.2); } 50% { box-shadow:0 0 20px rgba(45,91,255,0.6); } 100% { box-shadow:0 0 8px rgba(45,91,255,0.2); } }
+#input-area { display:flex; gap:8px; flex-wrap:wrap; }
+#concept-input { flex:1; background:#1D1D22; border:1px solid #2A2A30; color:#E0E0E0; padding:10px; border-radius:6px; resize:vertical; font-family:inherit; font-size:0.9rem; min-height:60px; }
+#concept-input:focus { outline:none; border-color:#2D5BFF; }
+button { background:#2D5BFF; border:none; color:white; padding:8px 20px; border-radius:6px; font-weight:600; cursor:pointer; transition:background 0.2s; }
+button:hover { background:#1A4ADB; }
+#interject-btn { background:#FBBF24; color:#0A0A0C; }
+#interject-btn:hover { background:#E5A800; }
+#briefing-actions { margin-top:8px; display:flex; gap:8px; }
+#briefing-actions button { background:#1FBF75; }
+#briefing-actions button:hover { background:#17A35B; }
+.meter { margin-bottom:20px; }
+.meter label { display:block; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.5px; color:#888; margin-bottom:4px; }
+.meter-bar { background:#2A2A30; height:6px; border-radius:4px; overflow:hidden; margin-bottom:4px; }
+.meter-bar div { height:100%; width:0%; background:linear-gradient(90deg, #2D5BFF, #A855F7); transition:width 600ms cubic-bezier(0.4,0,0.2,1); border-radius:4px; }
+.meter span { font-variant-numeric:tabular-nums; font-size:0.9rem; font-weight:500; }
+#session-status { margin-top:20px; font-size:0.8rem; color:#888; border-top:1px solid #2A2A30; padding-top:12px; }
+.modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); display:flex; align-items:center; justify-content:center; }
+.modal-content { background:#1D1D22; padding:30px; border-radius:12px; width:500px; max-width:90%; position:relative; }
+.close-btn { position:absolute; top:12px; right:20px; font-size:1.5rem; cursor:pointer; color:#888; }
+.close-btn:hover { color:#fff; }
+.modal textarea { width:100%; background:#0A0A0C; border:1px solid #2A2A30; color:#E0E0E0; padding:10px; border-radius:6px; margin:12px 0; resize:vertical; min-height:80px; }
+.modal button { background:#FBBF24; color:#0A0A0C; width:100%; }
+.modal button:hover { background:#E5A800; }
+@media (max-width: 960px) { .grid-container { grid-template-columns:1fr; } #registry-panel { display:none; } #telemetry-panel { display:none; } }

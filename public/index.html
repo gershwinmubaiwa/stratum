@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Stratum -- AI Boardroom</title><link rel="stylesheet" href="styles.css"></head>
+<body>
+<div id="app">
+  <header><h1>STRATUM</h1><div id="mode-indicator" class="indicator">LIVE</div></header>
+  <div class="grid-container">
+    <aside id="registry-panel"><h2>Portfolio</h2><div id="registry-list"></div><button id="new-debate-btn">+ New Strategy</button></aside>
+    <main id="warroom"><div id="chat-feed"></div>
+      <div id="input-area"><textarea id="concept-input" placeholder="Enter your business concept..." rows="3"></textarea><button id="start-debate-btn">Launch Debate</button><button id="interject-btn" style="display:none;">Interject</button></div>
+      <div id="briefing-actions" style="display:none;"><button id="copy-briefing-btn">Copy Briefing</button><button id="download-briefing-btn">Download Briefing</button></div>
+    </main>
+    <aside id="telemetry-panel"><h2>Telemetry</h2>
+      <div class="meter"><label>Market Validation</label><div class="meter-bar"><div id="market-bar" style="width:0%;"></div></div><span id="market-value">0</span></div>
+      <div class="meter"><label>Capital Efficiency</label><div class="meter-bar"><div id="capital-bar" style="width:0%;"></div></div><span id="capital-value">0</span></div>
+      <div class="meter"><label>Execution Risk</label><div class="meter-bar"><div id="risk-bar" style="width:0%;"></div></div><span id="risk-value">0</span></div>
+      <div id="session-status">Standing by</div>
+    </aside>
+  </div>
+  <div id="interject-modal" class="modal" style="display:none;"><div class="modal-content"><span class="close-btn">&times;</span><h2>Course Correction</h2><textarea id="interject-input" placeholder="Type your directive..."></textarea><button id="submit-interject">Submit</button></div></div>
+</div>
+<script type="module" src="app.js"></script>
+</body></html>

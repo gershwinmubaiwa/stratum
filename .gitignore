@@ -1,0 +1,18 @@
+# Virtual Environment
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Environment variables (contains API keys)
+.env
+.env.backup
+
+# The extracted Python source code folder
+Python-3.12.13/
+
+# VS Code settings
+.vscode/
