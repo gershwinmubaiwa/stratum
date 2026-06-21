@@ -1,7 +1,7 @@
 from typing import List, Optional
 from datetime import datetime
 from pydantic import BaseModel
-from app.models.schemas import TelemetryScores, DebateTurnComplete
+from app.models.schemas import DebateTurnComplete
 from app.core.state_machine import DebateState
 
 class SessionData(BaseModel):
@@ -17,6 +17,3 @@ class SessionData(BaseModel):
     max_turns: int = 5
     briefing_ready: bool = False
     error: Optional[str] = None
-
-    class Config:
-        arbitrary_types_allowed = True
