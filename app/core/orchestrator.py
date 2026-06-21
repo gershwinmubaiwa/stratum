@@ -57,7 +57,7 @@ async def run_debate_orchestration(session_id):
 
             if full_message:
                 new_scores = compute_telemetry(session.final_scores, agent_id, session.current_turn_index, transcript + [full_message], session.concept_text)
-                complete = DebateTurnComplete(session_id=session_id, turn_index=session.current_turn_index, agent_id=agent_id, public_message=full_message, internal_thought_log=full_message, telemetry_scores=new_scores.model_dump(), state=session.state)
+                complete = DebateTurnComplete(session_id=session_id, turn_index=session.current_turn_index, agent_id=agent_id, public_message=full_message, internal_thought_log=full_message, telemetry_scores=new_scores.dict(), state=session.state)
                 session.transcript.append(complete)
                 session.final_scores = new_scores
                 session.telemetry_history.append(new_scores)
@@ -83,7 +83,7 @@ async def run_debate_orchestration(session_id):
                     briefing = generate_briefing(session)
                     session.briefing_ready = True
                     session_manager.update_session(session)
-                    yield {"event_type": "briefing_ready", "data": briefing.model_dump(mode='json')}
+                    yield {"event_type": "briefing_ready", "data": briefing.dict()}
                     break
             else:
                 session.state = DebateState.ERRORED

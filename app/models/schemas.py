@@ -10,7 +10,8 @@ class TelemetryScores(BaseModel):
 class DebateTurnChunk(BaseModel): session_id: str; turn_index: int; agent_id: AgentID; chunk_text: str; is_final_chunk: bool
 class DebateTurnComplete(BaseModel): session_id: str; turn_index: int; agent_id: AgentID; public_message: str; internal_thought_log: str; telemetry_scores: TelemetryScores; state: DebateState
 class InterjectionRequest(BaseModel): session_id: str; directive_text: str = Field(min_length=5, max_length=500); model_config = ConfigDict(strict=True)
-class DebateStartRequest(BaseModel): concept_text: str = Field(min_length=10, max_length=2000); model_config = ConfigDict(strict=True)
+class Config:
+    arbitrary_types_allowed = True
 class DebateStartResponse(BaseModel): session_id: str; initial_state: DebateState
 class ErrorPayload(BaseModel): error_type: str; message: str; recoverable: bool
 class RegistryEntry(BaseModel): session_id: str; concept_summary: str; created_at: datetime; status: DebateState; final_scores: Optional[TelemetryScores] = None
