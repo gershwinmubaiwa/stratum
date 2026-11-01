@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💀 THE KELLY TEST</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Space+Mono:wght@700&display=swap');
+
+:root {
+  --pink: #ff0055;
+  --green: #00ff88;
+  --yellow: #ffe600;
+  --black: #080808;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at 20% 20%, #ff0055 0%, transparent 30%), radial-gradient(circle at 80% 80%, #6c00ff 0%, transparent 35%), #090909;
+  color: white;
+  font-family: 'Comic Neue', cursive;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.container {
+  width: 92%;
+  max-width: 480px;
+  background: white;
+  color: var(--black);
+  border: 5px solid black;
+  border-radius: 20px;
+  padding: 25px;
+  text-align: center;
+  box-shadow: 10px 10px 0 var(--pink);
+  position: relative;
+  z-index: 5;
+}
+
+.top-tag {
+  background: var(--yellow);
+  border: 3px solid black;
+  padding: 7px;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  transform: rotate(-2deg);
+  display: inline-block;
+  margin-bottom: 15px;
+}
+
+h1 {
+  font-size: clamp(27px, 7vw, 38px);
+  margin: 5px 0;
+  color: var(--pink);
+  text-shadow: 2px 2px black;
+}
+
+.question {
+  font-size: 21px;
+  font-weight: bold;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.4;
+  flex-direction: column;
+}
+
+.subtext {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 15px;
+}
+
+.progress {
+  height: 12px;
+  border: 3px solid black;
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 15px 0 20px;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--green);
+  transition: width 0.3s;
+}
+
+.buttons {
+  height: 95px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+button {
+  font-family: inherit;
+  font-weight: bold;
+  font-size: 18px;
+  border: 3px solid black;
+  border-radius: 10px;
+  padding: 12px 20px;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 black;
+  transition: transform 0.1s;
+}
+
+button:active {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0 black;
+}
+
+#yes {
+  background: var(--green);
+  color: black;
+  position: relative;
+  z-index: 2;
+}
+
+#no {
+  background: var(--pink);
+  color: white;
+  position: absolute;
+  left: 58%;
+  top: 20px;
+  z-index: 10;
+  white-space: nowrap;
+}
+
+#start, .next-btn {
+  background: var(--yellow);
+  width: 100%;
+  margin-top: 15px;
+}
+
+#reaction {
+  min-height: 35px;
+  font-size: 15px;
+  color: var(--pink);
+  font-weight: bold;
+}
+
+.meme {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  background: black;
+  color: white;
+  padding: 10px;
+  margin-top: 15px;
+  border-radius: 5px;
+}
+
+.custom-input {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+.custom-input input[type="number"] {
+  font-size: 24px;
+  padding: 10px;
+  width: 100px;
+  text-align: center;
+  border: 3px solid black;
+  border-radius: 10px;
+  font-family: inherit;
+}
+.upload-box {
+  border: 3px dashed var(--pink);
+  padding: 20px;
+  border-radius: 10px;
+  background: #f9f9f9;
+  cursor: pointer;
+  font-weight: bold;
+  display: block;
+  width: 100%;
+}
+.upload-box input[type="file"] { display: none; }
+.verify-text { display: none; color: green; font-weight: bold; margin-top: 10px; }
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.88);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  padding: 15px;
+}
+.modal-box {
+  width: 100%;
+  max-width: 400px;
+  background: white;
+  color: black;
+  border: 5px solid black;
+  border-radius: 15px;
+  padding: 25px;
+  text-align: center;
+  box-shadow: 8px 8px 0 var(--pink);
+}
+.modal-box h2 { color: var(--pink); font-size: 28px; }
+.modal-box p { font-size: 18px; font-weight: bold; }
+.modal-box button { width: 100%; margin: 8px 0; }
+.invoice {
+  background: #eee;
+  border: 2px dashed black;
+  padding: 15px;
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  text-align: left;
+  margin: 20px 0;
+}
+.pink-btn { background: var(--pink); color: white; }
+.green-btn { background: var(--green); }
+
+#final-screen { display: none; }
+#final-screen h2 { font-size: 35px; color: var(--pink); }
+#final-screen p { font-size: 19px; line-height: 1.5; }
+
+#toast {
+  position: fixed;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--yellow);
+  color: black;
+  border: 3px solid black;
+  padding: 10px 15px;
+  font-weight: bold;
+  z-index: 200;
+  display: none;
+  text-align: center;
+  width: max-content;
+  max-width: 90%;
+}
+
+@media (max-width: 400px) {
+  .container { padding: 18px; }
+  .question { font-size: 18px; }
+  button { font-size: 16px; padding: 10px 14px; }
+}
+</style>
+</head>
+<body>
+
+<div id="toast"></div>
+
+<div class="container">
+  <div class="top-tag">⚠️ OFFICIAL KELLY INVESTIGATION</div>
+  <h1 id="header">💀 THE KELLY TEST 💀</h1>
+  <div class="subtext" id="subtext">A completely unnecessary friendship assessment.</div>
+  
+  <div class="progress"><div class="progress-fill" id="progress"></div></div>
+
+  <div id="quiz">
+    <div class="question" id="question">
+      Kelly. We need to talk.<br>Your friendship is under investigation.
+    </div>
+
+    <div class="buttons" id="buttons" style="display:none">
+      <button id="yes" onclick="handleYes()">YES 😌</button>
+      <button id="no" onclick="handleNo()">NO 💀</button>
+    </div>
+
+    <div class="custom-input" id="input-hotness">
+      <div style="font-size: 40px; margin-bottom: 10px;" id="hotness-emoji">🤨</div>
+      <input type="number" id="hotness-val" placeholder="1-10" min="1" max="10">
+      <button class="next-btn" id="hotness-btn" onclick="handleHotness()" style="display: block; margin-bottom: 10px;">SUBMIT RATING</button>
+    </div>
+
+    <div class="custom-input" id="input-photo">
+      <label class="upload-box" id="photo-label">
+        📸 TAP TO UPLOAD PHOTO
+        <input type="file" accept="image/*" capture="user" onchange="fakeUpload()">
+      </label>
+      <div class="verify-text" id="photo-verified">✅ VERIFIED. CONTINUE.</div>
+      <button class="next-btn" id="photo-btn" onclick="handleYes()" style="display: none;">NEXT QUESTION</button>
+    </div>
+
+    <div class="custom-input" id="input-banana">
+      <label class="upload-box" id="banana-label" style="border-color: yellow;">
+        🍌 UPLOAD BANANA WITH SHADES
+        <input type="file" accept="image/*" onchange="fakeUpload('banana')">
+      </label>
+      <div class="verify-text" id="banana-verified" style="color: orange;">✅ BANANA DETECTED.</div>
+      <button class="next-btn" id="banana-btn" onclick="handleYes()" style="display: none;">NEXT QUESTION</button>
+    </div>
+
+    <div id="reaction"></div>
+    <button id="start" onclick="startQuiz()" style="display: block;">START THE NONSENSE 🚨</button>
+  </div>
+
+  <div id="final-screen">
+    <h2>🎉 KELLY PASSED?!</h2>
+    <p>
+      Type shiii. Well done Kelly, good job. 
+      <br><br>
+      You are incredibly lucky to have me. 
+      <br><br>
+      <strong>Gershwin's official best homeboy certification: GRANTED.</strong>
+      <br><br>
+      Your certificate is in the mail. The mailman is also broke.
+    </p>
+    <div class="meme">FRIENDSHIP STATUS: UNDER NEW MANAGEMENT</div>
+    <button onclick="location.reload()">RUN IT BACK 🔁</button>
+  </div>
+
+  <div class="meme" id="footer">THIS TEST IS OFFICIALLY RECOGNIZED.</div>
+</div>
+
+<!-- MODALS -->
+<div class="modal" id="sure-modal">
+  <div class="modal-box">
+    <h2>🚨 HOLD UP.</h2>
+    <p id="sure-text">Kelly, are you actually trying to deny Gershwin?</p>
+    <button class="pink-btn" onclick="confirmNo()">YES. I STAND ON BUSINESS.</button>
+    <button class="green-btn" onclick="cancelNo()">MY BAD 😭</button>
+  </div>
+</div>
+
+<div class="modal" id="pay-modal">
+  <div class="modal-box">
+    <h2>💀 ERROR 404</h2>
+    <p>FRIENDSHIP.exe HAS STOPPED WORKING.</p>
+    <div class="invoice">
+      <strong>INVOICE #001</strong><br>--------------------------<br>
+      Item: Being a hater<br>
+      Item: Disrespecting Gershwin<br>
+      Item: Denying the obvious<br>--------------------------<br>
+      Amount: <strong>$100.00 USD</strong><br>
+      Status: <span style="color:red;">UNPAID</span><br><br>
+      DEBT COLLECTORS HAVE BEEN NOTIFIED.
+    </div>
+    <p>To cancel this debt, admit that Gershwin is a real one. 😭</p>
+    <button class="pink-btn" onclick="showToast('PAYMENT DECLINED. TRY FLATTERING GERSHWIN. 💀')">PAY $100 💸</button>
+    <button class="green-btn" onclick="acceptDefeat()">FINE. I'LL SAY YES.</button>
+  </div>
+</div>
+
+<div class="modal" id="friends-modal">
+  <div class="modal-box">
+    <h2>👀 SAY LESS.</h2>
+    <p>Send their numbers to Gershwin immediately or this test will crash.</p>
+    <button class="pink-btn" onclick="closeFriendsModal()">I'LL SEND THEM RIGHT NOW</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {
+    q: "Who is the funniest person in the world? 😂",
+    yes: "GERSHWIN 🐐",
+    no: "Someone else 💀",
+    reaction: "There is only ONE correct answer.",
+    type: "standard"
+  },
+  {
+    q: "How hot is Gershwin on a scale of 1 to 10? 🔥",
+    reaction: "Good. The truth comes out.",
+    type: "hotness"
+  },
+  {
+    q: "Will you put Gershwin on with your hot friends? 👀",
+    yes: "I GOT YOU",
+    no: "You're on your own",
+    reaction: "The matchmaking department is watching.",
+    type: "friends"
+  },
+  {
+    q: "Take a picture of yourself with an ANGRY face. 😡",
+    reaction: "Anger verified.",
+    type: "photo"
+  },
+  {
+    q: "Now take a picture with a HAPPY thumbs up. 👍",
+    reaction: "Happiness verified.",
+    type: "photo"
+  },
+  {
+    q: "Finally, a SAD face. 😢",
+    reaction: "Gershwin will now cure all your emotions.",
+    type: "photo"
+  },
+  {
+    q: "If I asked for $10, would you send it? Send me 10 for medicine right now cause I'm sick of people's bullshit. 💸",
+    yes: "SAY LESS",
+    no: "I'm not your bank",
+    reaction: "The friendship has entered its financial era.",
+    type: "standard"
+  },
+  {
+    q: "Is Gershwin ever wrong? (True/False) 🤡",
+    yes: "TRUE (He is never wrong)",
+    no: "FALSE",
+    reaction: "Loyalty is being tested.",
+    type: "banana"
+  },
+  {
+    q: "Who is better at singing? 🎵",
+    yes: "GERSHWIN",
+    no: "Winky D / Jah Prayzah",
+    reaction: "Don't be a whidzo.",
+    type: "standard"
+  },
+  {
+    q: "FINAL BOSS: Is Gershwin the best homeboy ever? 👑",
+    yes: "YES. NO DEBATE.",
+    no: "I REFUSE.",
+    reaction: "The final judgment is approaching.",
+    type: "standard"
+  }
+];
+
+let currentQ = 0;
+let sureLevel = 0;
+let dodgeCount = 0;
+let toastTimer = null;
+let hotnessPassed = false;
+
+const sureTexts = [
+  "Are you sure? 🤨",
+  "ARE YOU REALLY SURE? 😭",
+  "Kelly. Think about the ribs. 🍖",
+  "This is your villain origin story.",
+  "Okay. Friendship court is now in session. 💀"
+];
+
+const noBtn = document.getElementById("no");
+
+function startQuiz() {
+  currentQ = 0;
+  document.getElementById("start").style.display = "none";
+  document.getElementById("quiz").style.display = "block";
+  document.getElementById("final-screen").style.display = "none";
+  document.getElementById("footer").style.display = "block";
+  loadQuestion();
+}
+
+function loadQuestion() {
+  const q = questions[currentQ];
+  
+  document.getElementById("buttons").style.display = "none";
+  document.getElementById("input-hotness").style.display = "none";
+  document.getElementById("input-photo").style.display = "none";
+  document.getElementById("input-banana").style.display = "none";
+  document.getElementById("reaction").innerText = "";
+  
+  document.getElementById("hotness-val").value = "";
+  document.getElementById("hotness-emoji").innerText = "🤨";
+  document.getElementById("hotness-btn").innerText = "SUBMIT RATING";
+  document.getElementById("hotness-btn").style.display = "block";
+  hotnessPassed = false;
+
+  document.getElementById("photo-label").style.display = "block";
+  document.getElementById("photo-verified").style.display = "none";
+  document.getElementById("photo-btn").style.display = "none";
+  
+  document.getElementById("banana-label").style.display = "block";
+  document.getElementById("banana-verified").style.display = "none";
+  document.getElementById("banana-btn").style.display = "none";
+
+  document.getElementById("question").innerText = q.q;
+  document.getElementById("header").innerText = `QUESTION ${currentQ + 1} OF ${questions.length}`;
+  document.getElementById("progress").style.width = `${(currentQ / questions.length) * 100}%`;
+
+  if (q.type === "standard" || q.type === "friends" || q.type === "banana") {
+    document.getElementById("buttons").style.display = "flex";
+    document.getElementById("yes").innerText = q.yes;
+    noBtn.innerText = q.no;
+    noBtn.style.display = "block";
+    noBtn.style.left = "58%";
+    noBtn.style.top = "20px";
+  } else if (q.type === "hotness") {
+    document.getElementById("input-hotness").style.display = "flex";
+  } else if (q.type === "photo") {
+    document.getElementById("input-photo").style.display = "flex";
+  }
+}
+
+// ADDED A BYPASS PARAMETER TO STOP THE INFINITE MODAL LOOP
+function handleYes(bypassFriendsModal = false) {
+  const q = questions[currentQ];
+  
+  // Check if it's the friends question AND we aren't bypassing the modal
+  if (q.type === "friends" && q.yes && !bypassFriendsModal) {
+    document.getElementById("friends-modal").style.display = "flex";
+    return; 
+  }
+
+  document.getElementById("reaction").innerText = q.reaction;
+  currentQ++;
+
+  if (currentQ < questions.length) {
+    setTimeout(loadQuestion, 800);
+  } else {
+    finishQuiz();
+  }
+}
+
+function handleHotness() {
+  if (hotnessPassed) {
+    handleYes();
+    return;
+  }
+
+  const val = document.getElementById("hotness-val").value;
+  const emoji = document.getElementById("hotness-emoji");
+  const btn = document.getElementById("hotness-btn");
+
+  if (val === "" || val < 1) return;
+
+  if (val < 9) {
+    emoji.innerText = "😡";
+    btn.style.display = "none";
+    showToast("LIAR. TRY AGAIN.");
+    setTimeout(() => {
+      document.getElementById("hotness-val").value = "";
+      emoji.innerText = "🤨";
+      btn.style.display = "block";
+    }, 1500);
+  } else if (val >= 9) {
+    emoji.innerText = "😁";
+    btn.innerText = "CORRECT! NEXT...";
+    hotnessPassed = true;
+  }
+}
+
+function fakeUpload(type) {
+  if (type === 'banana') {
+    document.getElementById("banana-label").style.display = "none";
+    document.getElementById("banana-verified").style.display = "block";
+    document.getElementById("banana-btn").style.display = "block";
+  } else {
+    document.getElementById("photo-label").style.display = "none";
+    document.getElementById("photo-verified").style.display = "block";
+    document.getElementById("photo-btn").style.display = "block";
+  }
+}
+
+function finishQuiz() {
+  document.getElementById("quiz").style.display = "none";
+  document.getElementById("final-screen").style.display = "block";
+  document.getElementById("header").innerText = "🎉 THE INVESTIGATION IS OVER 🎉";
+  document.getElementById("subtext").innerText = "The council has reached a verdict.";
+  document.getElementById("progress").style.width = "100%";
+  document.getElementById("footer").innerText = "CERTIFIED FRIENDSHIP MOMENT.";
+}
+
+function moveNoButton() {
+  const area = document.getElementById("buttons");
+  if (!area || area.style.display === "none" || noBtn.style.display === "none") return;
+
+  const maxX = Math.max(0, area.clientWidth - noBtn.offsetWidth);
+  const maxY = Math.max(0, area.clientHeight - noBtn.offsetHeight);
+
+  noBtn.style.left = `${Math.random() * maxX}px`;
+  noBtn.style.top = `${Math.random() * maxY}px`;
+
+  dodgeCount++;
+  if (dodgeCount % 4 === 0) showToast("💀 THE NO BUTTON IS TOO FAST.");
+}
+
+document.addEventListener("mousemove", function(e) {
+  if (noBtn.style.display === "none" || !noBtn.offsetWidth) return;
+  
+  const rect = noBtn.getBoundingClientRect();
+  const centerX = rect.left + rect.width / 2;
+  const centerY = rect.top + rect.height / 2;
+  
+  const dist = Math.hypot(e.clientX - centerX, e.clientY - centerY);
+  
+  if (dist < 120) {
+    moveNoButton();
+  }
+});
+
+noBtn.addEventListener("touchstart", function(e) {
+  e.preventDefault();
+  moveNoButton();
+}, { passive: false });
+
+function handleNo() {
+  if (questions[currentQ].type === "banana") {
+    document.getElementById("buttons").style.display = "none";
+    document.getElementById("input-banana").style.display = "flex";
+    return;
+  }
+
+  sureLevel = 0;
+  document.getElementById("sure-text").innerText = sureTexts[sureLevel];
+  document.getElementById("sure-modal").style.display = "flex";
+}
+
+function confirmNo() {
+  sureLevel++;
+  if (sureLevel < sureTexts.length) {
+    document.getElementById("sure-text").innerText = sureTexts[sureLevel];
+  } else {
+    document.getElementById("sure-modal").style.display = "none";
+    document.getElementById("pay-modal").style.display = "flex";
+  }
+}
+
+function cancelNo() {
+  document.getElementById("sure-modal").style.display = "none";
+  moveNoButton(); 
+}
+
+function acceptDefeat() {
+  document.getElementById("pay-modal").style.display = "none";
+  currentQ++;
+  if (currentQ < questions.length) {
+    loadQuestion();
+  } else {
+    finishQuiz();
+  }
+}
+
+// FIXED: Pass 'true' to bypass the modal check and actually continue
+function closeFriendsModal() {
+  document.getElementById("friends-modal").style.display = "none";
+  handleYes(true);
+}
+
+function showToast(message) {
+  const toast = document.getElementById("toast");
+  toast.innerText = message;
+  toast.style.display = "block";
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { toast.style.display = "none"; }, 2000);
+}
+</script>
+
+</body>
+</html>
